@@ -9,10 +9,14 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     gnuplot \
     ffmpeg \
     python3 \
-    python3-pip \
+    python3-venv \
     curl \
     unzip \
     && rm -rf /var/lib/apt/lists/*
+
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
+RUN python3 -m venv "${VIRTUAL_ENV}"
 
 # Download and unpack Mumax3
 RUN curl -L https://mumax.ugent.be/mumax3-binaries/mumax3.12_linux_cuda12.9.tar.gz | tar xz -C /usr/local/bin --strip-components 1
@@ -20,11 +24,9 @@ RUN curl -L https://mumax.ugent.be/mumax3-binaries/mumax3.12_linux_cuda12.9.tar.
 # Install rclone
 RUN curl https://rclone.org/install.sh |  bash
 
-# install python stuff
-RUN pip install notebook && \
-    pip install papermill && \
-    pip install numpy && \
-    pip install discretisedfield
+# Install Python tools into the virtual environment.
+RUN python -m pip install --no-cache-dir --upgrade pip && \
+    python -m pip install --no-cache-dir notebook papermill numpy discretisedfield
 
 # # Install Tailscale
 RUN curl -fsSL https://tailscale.com/install.sh | sh
