@@ -15,6 +15,19 @@ permissions:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: mumax3-python-env-cuda12.0
+            cuda_image: nvidia/cuda:12.0.1-runtime-ubuntu22.04
+            mumax_url: https://mumax.ugent.be/mumax3-binaries/mumax3.12_linux_cuda12.0.tar.gz
+          - image: mumax3-python-env-cuda12.8
+            cuda_image: nvidia/cuda:12.8.0-runtime-ubuntu24.04
+            mumax_url: https://mumax.ugent.be/mumax3-binaries/mumax3.12_linux_cuda12.6.tar.gz
+          - image: mumax3-python-env-cuda12.9
+            cuda_image: nvidia/cuda:12.9.1-runtime-ubuntu24.04
+            mumax_url: https://mumax.ugent.be/mumax3-binaries/mumax3.12_linux_cuda12.9.tar.gz
 
     steps:
       - name: Checkout code
@@ -38,7 +51,10 @@ jobs:
           context: .
           file: ./Dockerfile
           push: ${{ github.event_name == 'push' }}
-          tags: ghcr.io/${{ github.repository }}/mumax3-python-env:latest
+          build-args: |
+            CUDA_IMAGE=${{ matrix.cuda_image }}
+            MUMAX_URL=${{ matrix.mumax_url }}
+          tags: ghcr.io/${{ github.repository }}/${{ matrix.image }}:latest
 
       - name: Image digest
         if: github.event_name == 'push'
