@@ -28,6 +28,9 @@ jobs:
           - image: mumax3-python-env-cuda12.9
             cuda_image: nvidia/cuda:12.9.1-runtime-ubuntu24.04
             mumax_url: https://mumax.ugent.be/mumax3-binaries/mumax3.12_linux_cuda12.9.tar.gz
+          - image: mumax3-python-env-cuda13.0
+            cuda_image: nvidia/cuda:13.0.2-runtime-ubuntu24.04
+            mumax_url: https://mumax.ugent.be/mumax3-binaries/mumax3.12_linux_cuda12.9.tar.gz
 
     steps:
       - name: Checkout code
