@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-devel-ubuntu22.04
+FROM nvidia/cuda:13.3.0-devel-ubuntu24.04
 
 RUN echo 'APT::Install-Suggests "0";' >> /etc/apt/apt.conf.d/00-docker
 RUN echo 'APT::Install-Recommends "0";' >> /etc/apt/apt.conf.d/00-docker
@@ -15,7 +15,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and unpack Mumax3
-RUN curl -L https://mumax.ugent.be/mumax3-binaries/mumax3.10_linux_cuda11.0.tar.gz | tar xz -C /usr/local/bin --strip-components 1
+RUN curl -L https://mumax.ugent.be/mumax3-binaries/mumax3.12_linux_cuda12.9.tar.gz | tar xz -C /usr/local/bin --strip-components 1
 
 # Install rclone
 RUN curl https://rclone.org/install.sh |  bash
